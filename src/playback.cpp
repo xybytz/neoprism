@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <string>
 #include <optional>
 #include <thread>
 #include <chrono>
@@ -47,7 +48,7 @@ std::pair<bool, uint8_t> ensureValidHeaders(std::vector<uint8_t>& e_bytearray) {
 	}
 }
 
-std::pair<std::vector<EventPacket>, str> CompileEventArray(std::vector<uint8_t>& e_bytearray) {
+std::pair<std::vector<EventPacket>, std::string> CompileEventArray(std::vector<uint8_t>& e_bytearray) {
 	std::pair<bool, uint8_t> headerInfo = ensureValidHeaders(e_bytearray);
 	std::vector<EventPacket> eventList;
 	if (!headerInfo.first) {
@@ -60,6 +61,8 @@ std::pair<std::vector<EventPacket>, str> CompileEventArray(std::vector<uint8_t>&
 		cur += sizeof_uint64_t;
 		std::memcpy(&e.event, e_bytearray.data()+cur, sizeof_uint8_t);
 		cur += sizeof_uint8_t;
+		uint16_t x;
+		uint16_t y;
 		switch (e.event) {
 			case Events::KEY_DOWN:
 			case Events::KEY_UP:
@@ -72,8 +75,6 @@ std::pair<std::vector<EventPacket>, str> CompileEventArray(std::vector<uint8_t>&
 			case Events::MOUSE_DOWN:
 			case Events::MOUSE_UP:
 				uint8_t button;
-				uint16_t x;
-				uint16_t y;
 				std::memcpy(&button, e_bytearray.data()+cur, sizeof_uint8_t);
 				cur += sizeof_uint8_t;
 				std::memcpy(&x, e_bytearray.data()+cur, sizeof_uint16_t);
@@ -86,8 +87,7 @@ std::pair<std::vector<EventPacket>, str> CompileEventArray(std::vector<uint8_t>&
 				break;
 
 			case Events::MOUSE_MOVE_ABSOLUTE:
-				uint16_t x;
-				uint16_t y;
+
 				std::memcpy(&x, e_bytearray.data()+cur, sizeof_uint16_t);
 				cur += sizeof_uint16_t;
 				std::memcpy(&y, e_bytearray.data()+cur, sizeof_uint16_t);
@@ -100,8 +100,6 @@ std::pair<std::vector<EventPacket>, str> CompileEventArray(std::vector<uint8_t>&
 				break; // TO BE IMPLEMENTED LATER
 
 			case Events::MOUSE_SCROLL:
-				uint16_t x;
-				uint16_t y;
 				int16_t dx;
 				int16_t dy;
 				std::memcpy(&x, e_bytearray.data()+cur, sizeof_uint16_t);
@@ -121,7 +119,7 @@ std::pair<std::vector<EventPacket>, str> CompileEventArray(std::vector<uint8_t>&
 			default:
 				break;
 		}
-		eventList.push_back(EventPacket);
+		eventList.push_back(e);
 	}
 	return {eventList,""};
 }
@@ -143,5 +141,5 @@ void PlayEventList(std::vector<EventPacket> eventList) {
 }
 
 PYBIND11_MODULE(playback, m) {
-    m.def("hello", &hello, "says hi lol");
+    m.def("CompileEventArray", &CompileEventArray, "i mean it just kind like parses the event array idk");
 }
