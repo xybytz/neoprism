@@ -10,9 +10,7 @@
 #include <thread>
 #include <chrono>
 #include "playback.h"
-
-#if defined(_WIN32) || defined(_WIN64)
-	#include "automation_windows"
+#include "automation.h"
 
 namespace py = pybind11;
 

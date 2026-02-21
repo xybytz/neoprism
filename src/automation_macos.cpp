@@ -2,7 +2,6 @@
 #include <automation.h>
 #include <cstdint>
 
-
 void keyStatus(uint16_t vk_code, bool status) {
 	CGEventRef keyStroke = CGEventCreateKeyboardEvent(NULL, (CGKeyCode)vk_code, status);
 	CGEventPost(kCGHIDEventTap, keyStroke);
