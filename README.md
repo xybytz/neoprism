@@ -276,4 +276,4 @@ When testing with a recording of Geometry Dash gameplay (Stereo Madness), Neopri
 
 ## Acknowledgements
 
-Thank you to @xbytz for helping to port the majority of the C++ portion of the app to Windows.
+Thank you to @xybytz for helping to port the majority of the C++ portion of the app to Windows.
